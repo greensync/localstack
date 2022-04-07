@@ -6,7 +6,6 @@ import shutil
 import time
 from datetime import datetime
 from io import BytesIO
-from typing import List
 
 import pytest
 from botocore.exceptions import ClientError
