@@ -20,7 +20,6 @@ from localstack.services.awslambda.lambda_utils import (
 from localstack.utils import testutil
 from localstack.utils.aws import aws_stack
 from localstack.utils.common import retry, safe_requests, short_uid
-from localstack.utils.kinesis import kinesis_connector
 from localstack.utils.strings import to_bytes
 from localstack.utils.sync import poll_condition
 from localstack.utils.testutil import check_expected_lambda_log_events_length, get_lambda_log_events
@@ -31,8 +30,8 @@ from .test_lambda import (
     TEST_LAMBDA_LIBS,
     TEST_LAMBDA_PYTHON,
     TEST_LAMBDA_PYTHON_ECHO,
-    is_old_provider,
     TEST_LAMBDA_PYTHON_UNHANDLED_ERROR,
+    is_old_provider,
 )
 
 TEST_STAGE_NAME = "testing"
