@@ -340,11 +340,13 @@ def subscribe_to_shard(data, headers):
         iter = iterator
         last_sequence_number = starting_sequence_number
         # TODO: find better way to run loop up to max 5 minutes (until connection terminates)!
-        for i in range(5 * 60):
+        for i in range(10):
+            LOG.warn("send_events - iteration %s", i)
             result = None
             try:
                 result = kinesis.get_records(ShardIterator=iter)
             except Exception as e:
+                LOG.warn("send_events - exception during get_records: %s", e)
                 if "ResourceNotFoundException" in str(e):
                     LOG.debug(
                         'Kinesis stream "%s" has been deleted, closing shard subscriber',
@@ -372,6 +374,7 @@ def subscribe_to_shard(data, headers):
                 "Records": json_safe(records),
             }
             result = json.dumps(response)
+            LOG.warn(result)
             yield convert_to_binary_event_payload(result, event_type="SubscribeToShardEvent")
 
     headers = {}

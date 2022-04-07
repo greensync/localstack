@@ -174,6 +174,7 @@ def run_server(
     app.config["MAX_CONTENT_LENGTH"] = max_content_length or DEFAULT_MAX_CONTENT_LENGTH
     if send_timeout:
         app.config["BODY_TIMEOUT"] = send_timeout
+    app.config["RESPONSE_TIMEOUT"] = None
 
     @app.route("/", methods=HTTP_METHODS, defaults={"path": ""})
     @app.route("/<path:path>", methods=HTTP_METHODS)
@@ -181,6 +182,15 @@ def run_server(
         response = await make_response("{}")
         if handler:
             data = await request.get_data()
+            LOG.warning("\n========================================================================================================="),
+            LOG.warning("request: %s", request),
+            LOG.warning("request.method: %s", request.method),
+            LOG.warning("request.url: %s", request.url),
+            LOG.warning("request.path: %s", request.path),
+            LOG.warning("request.root_path: %s", request.root_path),
+            LOG.warning("request.query_string: %s", request.query_string),
+            LOG.warning("request.headers: %s", request.headers),
+            LOG.warning("data: %s", data),
             try:
                 result = await run_sync(handler, request, data)
                 if isinstance(result, Exception):
@@ -201,6 +211,8 @@ def run_server(
                 # check if this is an async generator (for HTTP2 push event responses)
                 async_gen = get_async_generator_result(result)
                 if async_gen:
+                    LOG.warning("ASYNC!!!!!!!!!"),
+                    LOG.warning(async_gen),
                     return async_gen
                 # prepare and return regular response
                 is_chunked = uses_chunked_encoding(result)
