@@ -144,6 +144,7 @@ def get_async_generator_result(result):
     gen, headers = result, {}
     if isinstance(result, tuple) and len(result) >= 2:
         gen, headers = result[:2]
+        headers.update({'Content-Type': 'application/vnd.amazon.eventstream'})
     if not isinstance(gen, (collections.abc.Generator, collections.abc.AsyncGenerator)):
         return
     return gen, headers

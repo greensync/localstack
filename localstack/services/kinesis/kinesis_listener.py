@@ -336,7 +336,7 @@ def subscribe_to_shard(data, headers):
     )["ShardIterator"]
 
     def send_events():
-        yield convert_to_binary_event_payload("", event_type="initial-response")
+        yield convert_to_binary_event_payload('{"event_stream": null}', event_type="initial-response")
         iter = iterator
         last_sequence_number = starting_sequence_number
         max_connection_duration_seconds = 5 * 60
