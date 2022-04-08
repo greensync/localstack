@@ -339,9 +339,10 @@ def subscribe_to_shard(data, headers):
         yield convert_to_binary_event_payload("", event_type="initial-response")
         iter = iterator
         last_sequence_number = starting_sequence_number
-        # TODO: find better way to run loop up to max 5 minutes (until connection terminates)!
-        for i in range(10):
-            LOG.warn("send_events - iteration %s", i)
+        max_connection_duration_seconds = 5 * 60
+        end_at = time.monotonic() + max_connection_duration_seconds
+        while time.monotonic() < end_at:
+            LOG.warn("send_events iteration")
             result = None
             try:
                 result = kinesis.get_records(ShardIterator=iter)
