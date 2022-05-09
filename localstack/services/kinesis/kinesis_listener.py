@@ -366,7 +366,6 @@ def subscribe_to_shard(data, headers):
                 last_sequence_number = record["SequenceNumber"]
             if not records:
                 time.sleep(1)
-                continue
 
             response = {
                 "ChildShards": [],
